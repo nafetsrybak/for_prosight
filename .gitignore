@@ -1,0 +1,7 @@
+log/nginx/*
+!log/nginx/.gitkeep
+log/php/*
+!log/php/.gitkeep
+log/cron/*
+!log/cron/.gitkeep
+.vscode/

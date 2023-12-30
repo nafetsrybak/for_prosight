@@ -1,0 +1,61 @@
+version: '3.7'
+
+services:
+    nginx:
+        env_file:
+            - .env
+        build:
+            context: ./_nginx
+            dockerfile: Dockerfile.dev
+        container_name: ${NGINX_CONTAINER_NAME}
+        hostname: web
+        image: nginx
+        ports:
+            - "${NGINX_PORT}:80"
+        volumes:
+            - ./app:/app
+            - ./log/nginx:/var/log/nginx
+        links:
+            - php
+        environment:
+            TZ: ${TZ}
+        depends_on:
+            - php
+    php:
+        env_file:
+            - .env
+        build:
+            context: ./_php
+            dockerfile: Dockerfile.dev
+        container_name: ${PHP_CONTAINER_NAME}
+        hostname: php
+        ports:
+            - "${XDEBUG_HOST}:9003"
+        volumes:
+            - ./app:/app
+            - ./log/php:/var/log/php
+        links:
+            - db
+        environment:
+            TZ: ${TZ}
+        depends_on:
+            - db
+    db:
+        env_file:
+            - .env
+        build:
+            context: ./_db
+            dockerfile: Dockerfile.dev
+        container_name: ${DB_CONTAINER_NAME}
+        hostname: db
+        ports:
+            - "127.0.0.1:5432:5432"
+        environment:
+            TZ: ${TZ}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_DB: ${DB_DATABASE}
+        volumes:
+            - db_data:/var/lib/postgresql/data
+volumes:
+    db_data:

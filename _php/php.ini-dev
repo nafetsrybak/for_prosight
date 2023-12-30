@@ -1,0 +1,39 @@
+[xdebug]
+xdebug.mode=debug,develop
+xdebug.start_with_request=yes
+xdebug.client_host=host.docker.internal
+
+date.timezone = Europe/Bratislava
+
+# Enable logging of errors
+log_errors=On
+
+# Disable display of errors
+display_errors = Off
+
+# Set error reporting level. Report all errors except for notices and coding standards warnings.
+error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT
+
+# Log errors to specified file
+error_log = /var/log/php/error.log
+
+# Do not expose PHP version
+expose_php = Off
+
+# Maximum execution time of each script, in seconds
+max_execution_time = 30
+
+# Maximum amount of time each script may spend parsing request data
+max_input_time = 60
+
+# Maximum amount of memory a script may consume
+memory_limit = 128M
+
+# Maximum size of POST data that PHP will accept
+post_max_size = 8M
+
+# Maximum allowed size for uploaded files
+upload_max_filesize = 2M
+
+# Maximum number of files that can be uploaded via a single request
+max_file_uploads = 20

@@ -1,0 +1,32 @@
+FROM php:8.2-fpm
+
+RUN apt-get update && apt-get install -y net-tools wget \
+    curl iputils-ping nano htop cron git zip libicu-dev && \
+    docker-php-ext-configure intl && \
+    docker-php-ext-install intl && \
+    docker-php-ext-install opcache && \
+    docker-php-ext-enable opcache && \
+    pecl install xdebug && docker-php-ext-enable xdebug && \
+    # Add driver for PostgreSQL
+    apt-get install -y libpq-dev && \
+    docker-php-ext-install pdo_pgsql && \
+    docker-php-ext-enable pdo_pgsql && \
+    # Composer install TODO Check hash
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Copy php.ini file to the container
+COPY php.ini-dev /usr/local/etc/php/php.ini
+
+# Create entrypoint script
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+# Make entrypoint script executable
+RUN chmod +x /usr/local/bin/entrypoint.sh && \
+    # Create directory for php logs
+    mkdir -p /var/log/php
+
+# Set working directory
+WORKDIR /app
+
+# Set entrypoint
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

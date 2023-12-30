@@ -1,0 +1,7 @@
+FROM nginx:stable
+
+# Remove default nginx configs.
+RUN rm -f /etc/nginx/conf.d/*
+
+# Copy site.conf file to the container
+COPY site.conf /etc/nginx/conf.d/site.conf
